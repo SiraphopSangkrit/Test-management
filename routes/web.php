@@ -14,13 +14,28 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('home');
+    return view('welcome');
 });
 
-Auth::routes();
+//auth for both
+Route::group(['middleware'=>['auth']], function(){
+    Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name
+    ('dashboard');
+});
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//auth for user
+Route::group(['middleware'=>['auth','role:student']], function(){
+    Route::get('/dashboard/Student', 'App\Http\Controllers\DashboardController@Studentprofile')->name
+    ('dashboard.Studentprofile');
+});
 
-Auth::routes();
+Route::group(['middleware'=>['auth','role:teacher']], function(){
+    Route::get('/dashboard/Teacher', 'App\Http\Controllers\DashboardController@Teacherprofile')->name
+    ('dashboard.Teacherprofile');
+    Route::get('/dashboard/ManageTest', 'App\Http\Controllers\DashboardController@ManageTest')->name
+    ('dashboard.managetest');
+});
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+require __DIR__.'/auth.php';
