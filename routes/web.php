@@ -23,17 +23,25 @@ Route::group(['middleware'=>['auth']], function(){
     ('dashboard');
 });
 
+
 //auth for user
 Route::group(['middleware'=>['auth','role:student']], function(){
     Route::get('/dashboard/Student', 'App\Http\Controllers\DashboardController@Studentprofile')->name
     ('dashboard.Studentprofile');
 });
 
+//auth for teacher
 Route::group(['middleware'=>['auth','role:teacher']], function(){
     Route::get('/dashboard/Teacher', 'App\Http\Controllers\DashboardController@Teacherprofile')->name
     ('dashboard.Teacherprofile');
     Route::get('/dashboard/ManageTest', 'App\Http\Controllers\DashboardController@ManageTest')->name
     ('dashboard.managetest');
+});
+
+//auth for admin
+Route::group(['middleware'=>['auth','role:admin']], function(){
+    Route::get('/dashboard/CreateUser', 'App\Http\Controllers\AdminController@CreateUser')->name
+    ('dashboard.CreateUser');
 });
 
 
